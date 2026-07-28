@@ -1,0 +1,115 @@
+using Statistics
+
+team_wins = Dict("Hawks" => 46, "Celtics" => 56, "Nets" => 20, "Hornets" => 44, "Bulls" => 31, "Cavaliers" => 52, "Mavericks" => 31, "Nuggets" => 54, "Pistons" => 60, "Warriors" => 36, "Rockets" => 52, "Pacers" => 19, "Lakers" => 53, "Clippers" => 42, "Grizzlies" => 25, "Heat" => 43, "Bucks" => 32, "Timberwolves" => 49, "Pelicans" => 26, "Knicks" => 53, "Thunder" => 64, "Magic" => 45, "76ers" => 45, "Suns" => 45, "Trail Blazers" => 42, "Kings" => 22, "Spurs" => 62, "Raptors" => 46, "Jazz" => 22, "Wizards" => 17)
+
+avg_g_played = Dict("Hawks" => 63, "Celtics" => 75, "Nets" => 62, "Hornets" => 54, "Bulls" => 54, "Cavaliers" => 63, "Mavericks" => 66, "Nuggets" => 56, "Pistons" => 49, "Warriors" => 43, "Rockets" => 56, "Pacers" => 38, "Clippers" => 39, "Lakers" => 57, "Grizzlies" => 38, "Heat" => 59, "Bucks" => 42, "Timberwolves" => 69, "Pelicans" => 62, "Knicks" => 64, "Thunder" => 54, "Magic" => 59, "76ers" => 56, "Suns"=> 48, "Trail Blazers" => 49, "Kings" => 59, "Spurs" => 54, "Raptors" => 59, "Jazz" => 72, "Wizards" => 49)
+avg_mins_played_per_game_per_player = Dict("Hawks" => 22.7, "Celtics" => 29.6, "Nets" => 21.9, "Hornets" => 18.7, "Bulls" => 25.4, "Cavaliers" => 30.3, "Mavericks" => 25.4, "Nuggets" => 22.4, "Pistons" => 20.8, "Warriors" => 17.2, "Rockets" => 16.0, "Pacers" => 13.8, "Clippers" => 22.1, "Lakers" => 18.1, "Grizzlies" => 22.7, "Heat" => 20.8, "Bucks" => 21.4, "Timberwolves" => 33.2, "Pelicans" => 23.0, "Knicks" => 22.1, "Thunder" => 21.0, "Magic" => 22.8, "76ers" => 25.9, "Suns" => 16.6, "Trail Blazers" => 20.7, "Kings" => 22.1, "Spurs" => 17.8, "Raptors" => 22.8, "Jazz" => 23.9, "Wizards" => 21.7)
+avg_fgs_made_per_game_per_player = Dict("Hawks" => 4.8, "Celtics" => 4.2, "Nets" => 3.4, "Hornets" => 4.0, "Bulls" => 4.9, "Cavaliers" => 7.9, "Mavericks" => 4.0, "Nuggets" => 4.0, "Pistons" => 4.7, "Warriors" => 3.1, "Rockets" => 2.9, "Pacers" => 1.7, "Clippers" => 4.2, "Lakers" => 3.4, "Grizzlies" => 3.5, "Heat" => 4.1, "Bucks" => 5.7, "Timberwolves" => 7.2, "Pelicans" => 3.6, "Knicks" => 5.1, "Thunder" => 5.8, "Magic" => 4.7, "76ers" => 4.2, "Suns" => 2.7, "Trail Blazers" => 4.3, "Kings" => 3.6, "Spurs" => 4.7, "Raptors" => 3.6, "Jazz" => 3.9, "Wizards" => 3.6)
+avg_fgs_attempted_per_game_per_player = Dict("Hawks" => 10.2, "Celtics" => 8.8, "Nets" => 6.8, "Hornets" => 9.1, "Bulls" => 10.8, "Cavaliers" => 14.7, "Mavericks" => 7.6, "Nuggets" => 8.2, "Pistons" => 10.6, "Warriors" => 6.8, "Rockets" => 6.9, "Pacers" => 3.7, "Clippers" => 10.0, "Lakers" => 5.5, "Grizzlies" => 7.5, "Heat" => 9.2, "Bucks" => 9.4, "Timberwolves" => 13.4, "Pelicans" => 7.4, "Knicks" => 10.7, "Thunder" => 10.6, "Magic" => 10.1, "76ers" => 10.0, "Suns" => 4.6, "Trail Blazers" => 9.2, "Kings" => 7.0, "Spurs" => 9.4, "Raptors" => 6.2, "Jazz" => 8.1, "Wizards" => 7.9)
+avg_fg_pct_per_player = Dict("Hawks" => 0.471, "Celtics" => 0.477, "Nets" => 0.500, "Hornets" => 0.440, "Bulls" => 0.454, "Cavaliers" => 0.547, "Mavericks" => 0.526, "Nuggets" => 0.488, "Pistons" => 0.443, "Warriors" => 0.456, "Rockets" => 0.420, "Pacers" => 0.459, "Clippers" => 0.420, "Lakers" => 0.618, "Grizzlies" => 0.467, "Heat" => 0.446, "Bucks" => 0.606, "Timberwolves" => 0.537, "Pelicans" => 0.486, "Knicks" => 0.477, "Thunder" => 0.547, "Magic" => 0.465, "76ers" => 0.420, "Suns" => 0.587, "Trail Blazers" => 0.467, "Kings" => 0.514, "Spurs" => 0.500, "Raptors" => 0.581, "Jazz" => 0.481, "Wizards" => 0.456)
+avg_3ps_made_per_game_per_player = Dict("Hawks" => 1.2, "Celtics" => 2.3, "Nets" => 0.5, "Hornets" => 1.8, "Bulls" => 1.6, "Cavaliers" => 1.6, "Mavericks" => 1.2, "Nuggets" => 1.3, "Pistons" => 1.3, "Warriors" => 0.8, "Rockets" => 1.6, "Pacers" => 1.1, "Clippers" => 1.1, "Lakers" => 1.1, "Grizzlies" => 0.9, "Heat" => 1.2, "Bucks" => 1.2, "Timberwolves" => 1.4, "Pelicans" => 1.2, "Knicks" => 1.3, "Thunder" => 1.1, "Magic" => 1.0, "76ers" => 1.3, "Suns" => 1.4, "Trail Blazers" => 1.3, "Kings" => 1.1, "Spurs" => 1.2, "Raptors" => 1.0, "Jazz" => 0.7, "Wizards" => 1.0)
+avg_3ps_attempted_per_game_per_player = Dict("Hawks" => 3.3, "Celtics" => 6.1, "Nets" => 1.6, "Hornets" => 4.7, "Bulls" => 4.9, "Cavaliers" => 4.5, "Mavericks" => 2.9, "Nuggets" => 3.1, "Pistons" => 3.9, "Warriors" => 2.5, "Rockets" => 4.3, "Pacers" => 3.1, "Clippers" => 3.0, "Lakers" => 3.2, "Grizzlies" => 2.7, "Heat" => 3.5, "Bucks" => 3.2, "Timberwolves" => 3.7, "Pelicans" => 3.4, "Knicks" => 3.6, "Thunder" => 3.1, "Magic" => 2.9, "76ers" => 3.6, "Suns" => 3.9, "Trail Blazers" => 3.9, "Kings" => 3.2, "Spurs" => 3.4, "Raptors" => 2.8, "Jazz" => 2.5, "Wizards" => 2.8)
+avg_3p_pct_per_player = Dict("Hawks" => 0.364, "Celtics" => 0.377, "Nets" => 0.313, "Hornets" => 0.383, "Bulls" => 0.327, "Cavaliers" => 0.356, "Mavericks" => 0.414, "Nuggets" => 0.419, "Pistons" => 0.333, "Warriors" => 0.320, "Rockets" => 0.372, "Pacers" => 0.355, "Clippers" => 0.367, "Lakers" => 0.344, "Grizzlies" => 0.333, "Heat" => 0.343, "Bucks" => 0.375, "Timberwolves" => 0.378, "Pelicans" => 0.353, "Knicks" => 0.361, "Thunder" => 0.355, "Magic" => 0.345, "76ers" => 0.361, "Suns" => 0.359, "Trail Blazers" => 0.333, "Kings" => 0.344, "Spurs" => 0.353, "Raptors" => 0.357, "Jazz" => 0.280, "Wizards" => 0.357)
+avg_2ps_made_per_game_per_player = Dict("Hawks" => 3.7, "Celtics" => 4.6, "Nets" => 2.9, "Hornets" => 2.1, "Bulls" => 3.2, "Cavaliers" => 6.3, "Mavericks" => 2.8, "Nuggets" => 2.7, "Pistons" => 3.5, "Warriors" => 2.3, "Rockets" => 1.3, "Pacers" => 1.4, "Clippers" => 2.5, "Lakers" => 3.1, "Grizzlies" => 2.7, "Heat" => 3.0, "Bucks" => 5.2, "Timberwolves" => 5.5, "Pelicans" => 3.0, "Knicks" => 3.8, "Thunder" => 4.8, "Magic" => 3.4, "76ers" => 2.6, "Suns" => 2.5, "Trail Blazers" => 3.0, "Kings" => 2.8, "Spurs" => 3.6, "Raptors" => 2.9, "Jazz" => 3.2, "Wizards" => 2.7)
+avg_2ps_attempted_per_game_per_player = Dict("Hawks" => 6.8, "Celtics" => 8.6, "Nets" => 5.3, "Hornets" => 4.4, "Bulls" => 5.9, "Cavaliers" => 10.3, "Mavericks" => 4.7, "Nuggets" => 5.1, "Pistons" => 6.8, "Warriors" => 4.3, "Rockets" => 2.7, "Pacers" => 1.6, "Clippers" => 4.9, "Lakers" => 4.9, "Grizzlies" => 4.9, "Heat" => 5.8, "Bucks" => 8.1, "Timberwolves" => 9.1, "Pelicans" => 5.8, "Knicks" => 7.1, "Thunder" => 8.1, "Magic" => 6.5, "76ers" => 5.6, "Suns" => 4.0, "Trail Blazers" => 5.4, "Kings" => 4.8, "Spurs" => 6.2, "Raptors" => 4.2, "Jazz" => 5.6, "Wizards" => 5.1)
+avg_2p_pct_per_player = Dict("Hawks" => 0.544, "Celtics" => 0.535, "Nets" => 0.547, "Hornets" => 0.477, "Bulls" => 0.542, "Cavaliers" => 0.612, "Mavericks" => 0.596, "Nuggets" => 0.529, "Pistons" => 0.515, "Warriors" => 0.535, "Rockets" => 0.481, "Pacers" => 0.538, "Clippers" => 0.510, "Lakers" => 0.633, "Grizzlies" => 0.551, "Heat" => 0.517, "Bucks" => 0.642, "Timberwolves" => 0.604, "Pelicans" => 0.517, "Knicks" => 0.535, "Thunder" => 0.593, "Magic" => 0.523, "76ers" => 0.464, "Suns" => 0.625, "Trail Blazers" => 0.556, "Kings" => 0.583, "Spurs" => 0.581, "Raptors" => 0.674, "Jazz" => 0.571, "Wizards" => 0.529)
+avg_efg_pct_per_player = Dict("Hawks" => 0.523, "Celtics" => 0.553, "Nets" => 0.534, "Hornets" => 0.552, "Bulls" => 0.518, "Cavaliers" => 0.601, "Mavericks" => 0.611, "Nuggets" => 0.559, "Pistons" => 0.467, "Warriors" => 0.534, "Rockets" => 0.503, "Pacers" => 0.514, "Clippers" => 0.488, "Lakers" => 0.588, "Grizzlies" => 0.511, "Heat" => 0.541, "Bucks" => 0.607, "Timberwolves" => 0.627, "Pelicans" => 0.525, "Knicks" => 0.551, "Thunder" => 0.514, "Magic" => 0.518, "76ers" => 0.497, "Suns" => 0.542, "Trail Blazers" => 0.561, "Kings" => 0.557, "Spurs" => 0.547, "Raptors" => 0.641, "Jazz" => 0.522, "Wizards" => 0.529)
+avg_fts_made_per_game_per_player = Dict("Hawks" => 2.2, "Celtics" => 3.1, "Nets" => 1.7, "Hornets" => 1.7, "Bulls" => 1.7, "Cavaliers" => 4.3, "Mavericks" => 1.8, "Nuggets" => 1.8, "Pistons" => 2.5, "Warriors" => 1.4, "Rockets" => 0.5, "Pacers" => 0.5, "Clippers" => 4.2, "Lakers" => 0.7, "Grizzlies" => 1.0, "Heat" => 2.5, "Bucks" => 3.3, "Timberwolves" => 3.9, "Pelicans" => 2.3, "Knicks" => 2.7, "Thunder" => 4.1, "Magic" => 2.7, "76ers" => 1.3, "Suns" => 1.3, "Trail Blazers" => 3.8, "Kings" => 1.2, "Spurs" => 3.0, "Raptors" => 1.2, "Jazz" => 1.7, "Wizards" => 1.8)
+avg_fts_attempted_per_game_per_player = Dict("Hawks" => 2.8, "Celtics" => 3.9, "Nets" => 2.6, "Hornets" => 2.0, "Bulls" => 2.2, "Cavaliers" => 5.4, "Mavericks" => 2.4, "Nuggets" => 2.4, "Pistons" => 3.1, "Warriors" => 2.0, "Rockets" => 0.6, "Pacers" => 0.7, "Clippers" => 4.7, "Lakers" => 1.1, "Grizzlies" => 1.6, "Heat" => 3.2, "Bucks" => 5.1, "Timberwolves" => 5.6, "Pelicans" => 2.9, "Knicks" => 3.2, "Thunder" => 4.7, "Magic" => 3.1, "76ers" => 1.6, "Suns" => 1.6, "Trail Blazers" => 4.7, "Kings" => 1.5, "Spurs" => 3.6, "Raptors" => 1.7, "Jazz" => 2.3, "Wizards" => 2.4)
+avg_ft_pct_per_player = Dict("Hawks" => 0.786, "Celtics" => 0.795, "Nets" => 0.654, "Hornets" => 0.850, "Bulls" => 0.773, "Cavaliers" => 0.796, "Mavericks" => 0.750, "Nuggets" => 0.750, "Pistons" => 0.806, "Warriors" => 0.700, "Rockets" => 0.833, "Pacers" => 0.714, "Clippers" => 0.894, "Lakers" => 0.636, "Grizzlies" => 0.625, "Heat" => 0.781, "Bucks" => 0.647, "Timberwolves" => 0.696, "Pelicans" => 0.793, "Knicks" => 0.844, "Thunder" => 0.872, "Magic" => 0.871, "76ers" => 0.813, "Suns" => 0.813, "Trail Blazers" => 0.809, "Kings" => 0.800, "Spurs" => 0.833, "Raptors" => 0.706, "Jazz" => 0.739, "Wizards" => 0.750)
+avg_orb_per_game_per_player = Dict("Hawks" => 0.8, "Celtics" => 0.9, "Nets" => 1.4, "Hornets" => 0.8, "Bulls" => 0.8, "Cavaliers" => 1.7, "Mavericks" => 1.4, "Nuggets" => 0.6, "Pistons" => 0.6, "Warriors" => 1.1, "Rockets" => 0.3, "Pacers" => 1.0, "Clippers" => 0.6, "Lakers" => 1.4,  "Grizzlies" => 1.9, "Heat" => 1.5, "Bucks" => 1.5, "Timberwolves" => 2.3, "Pelicans" => 1.0, "Knicks" => 0.7, "Thunder" => 0.6, "Magic" => 1.0, "76ers" => 0.9, "Suns" => 1.8, "Trail Blazers" => 0.7, "Kings" => 1.1, "Spurs" => 1.1, "Raptors" => 1.7, "Jazz" => 1.4, "Wizards" => 0.7)
+avg_drb_per_game_per_player = Dict("Hawks" => 5.0, "Celtics" => 4.5, "Nets" => 3.2, "Hornets" => 2.5, "Bulls" => 3.7, "Cavaliers" => 4.9, "Mavericks" => 3.7, "Nuggets" => 2.9, "Pistons" => 2.6, "Warriors" => 2.1, "Rockets" => 1.6, "Pacers" => 1.3, "Clippers" => 2.6, "Lakers" => 2.9, "Grizzlies" => 2.7, "Heat" => 4.9, "Bucks" => 4.0, "Timberwolves" => 6.0, "Pelicans" => 3.6, "Knicks" => 2.4, "Thunder" => 2.6, "Magic" => 2.7, "76ers" => 3.0, "Suns" => 3.1, "Trail Blazers" => 3.4, "Kings" => 3.3, "Spurs" => 5.1, "Raptors" => 3.2, "Jazz" => 3.7, "Wizards" => 2.6)
+avg_trb_per_game_per_player = Dict("Hawks" => 5.8, "Celtics" => 5.4, "Nets" => 4.6, "Hornets" => 3.3, "Bulls" => 4.5, "Cavaliers" => 6.6, "Mavericks" => 5.1, "Nuggets" => 3.5, "Pistons" => 3.2, "Warriors" => 3.2, "Rockets" => 1.9, "Pacers" => 2.3, "Clippers" => 3.2, "Lakers" => 4.3, "Grizzlies" => 4.6, "Heat" => 6.4, "Bucks" => 5.5, "Timberwolves" => 8.3, "Pelicans" => 4.6, "Knicks" => 3.1, "Thunder" => 3.2, "Magic" => 3.7, "76ers" => 3.9, "Suns" => 4.9, "Trail Blazers" => 4.1, "Kings" => 4.4, "Spurs" => 6.2, "Raptors" => 4.9, "Jazz" => 5.1, "Wizards" => 3.3)
+avg_assists_per_game_per_player = Dict("Hawks" => 4.9, "Celtics" => 3.3, "Nets" => 2.3, "Hornets" => 1.9, "Bulls" => 2.5, "Cavaliers" => 3.8, "Mavericks" => 1.6, "Nuggets" => 1.6, "Pistons" => 5.2, "Warriors" => 1.8, "Rockets" => 1.9, "Pacers" => 1.9, "Clippers" => 4.5, "Lakers" => 1.0, "Grizzlies" => 2.0, "Heat" => 2.1, "Bucks" => 3.3, "Timberwolves" => 2.7, "Pelicans" => 2.6, "Knicks" => 3.7, "Thunder" => 3.6, "Magic" => 2.5, "76ers" => 3.0, "Suns" => 0.8, "Trail Blazers" => 3.5, "Kings" => 1.0, "Spurs" => 2.0, "Raptors" => 1.6, "Jazz" => 2.3, "Wizards" => 2.8)
+avg_steals_per_game_per_player = Dict("Hawks" => 0.9, "Celtics" => 0.8, "Nets" => 0.6, "Hornets" => 0.7, "Bulls" => 0.8, "Cavaliers" => 1.3, "Mavericks" => 0.7, "Nuggets" => 0.7, "Pistons" => 0.8, "Warriors" => 1.0, "Rockets" => 0.8, "Pacers" => 0.4, "Clippers" => 0.8, "Lakers" => 0.6, "Grizzlies" => 0.9, "Heat" => 0.8, "Bucks" => 0.8, "Timberwolves" => 1.1, "Pelicans" => 0.8, "Knicks" => 0.5, "Thunder" => 0.9, "Magic" => 0.7, "76ers" => 1.0, "Suns" => 0.7, "Trail Blazers" => 0.5, "Kings" => 0.8, "Spurs" => 0.8, "Raptors" => 1.0, "Jazz" => 0.9, "Wizards" => 0.9)
+avg_blocks_per_game_per_player = Dict("Hawks" => 0.3, "Celtics" => 0.4, "Nets" => 0.6, "Hornets" => 0.4, "Bulls" => 0.8, "Cavaliers" => 0.6, "Mavericks" => 0.9, "Nuggets" => 0.6, "Pistons" => 0.4, "Warriors" => 0.5, "Rockets" => 0.4, "Pacers" => 0.1, "Clippers" => 0.3, "Lakers" => 0.6, "Grizzlies" => 0.5, "Heat" => 0.5, "Bucks" => 0.5, "Timberwolves" => 1.2, "Pelicans" => 0.6, "Knicks" => 0.3, "Thunder" => 0.5, "Magic" => 0.3, "76ers" => 0.3, "Suns" => 0.6, "Trail Blazers" => 0.5, "Kings" => 0.5, "Spurs" => 1.6, "Raptors" => 0.5, "Jazz" => 0.5, "Wizards" => 0.6)
+avg_turnovers_per_game_per_player = Dict("Hawks" => 2.0, "Celtics" => 2.0, "Nets" => 1.1, "Hornets" => 1.4, "Bulls" => 2.1, "Cavaliers" => 2.1, "Mavericks" => 1.2, "Nuggets" => 1.2, "Pistons" => 1.9, "Warriors" => 1.2,  "Rockets" => 0.8, "Pacers" => 0.7, "Clippers" => 2.1, "Lakers" => 0.9, "Grizzlies" => 1.3, "Heat" => 1.9, "Bucks" => 1.8, "Timberwolves" => 2.2, "Pelicans" => 1.4, "Knicks" => 1.5, "Thunder" => 1.3, "Magic" => 1.3, "76ers" => 1.3, "Suns" => 0.7, "Trail Blazers" => 2.0, "Kings" => 0.9, "Spurs" => 1.4, "Raptors" => 0.9, "Jazz" => 1.4, "Wizards" => 1.5)
+avg_fouls_per_game_per_player = Dict("Hawks" => 1.5, "Celtics" => 2.1, "Nets" => 2.0, "Hornets" => 1.5, "Bulls" => 2.5, "Cavaliers" => 2.0, "Mavericks" => 2.0, "Nuggets" => 1.9, "Pistons" => 1.8, "Warriors" => 1.5, "Rockets" => 1.2, "Pacers" => 1.4, "Clippers" => 1.2, "Lakers" => 1.5, "Grizzlies" => 2.3, "Heat" => 1.7, "Bucks" => 1.8, "Timberwolves" => 2.3, "Pelicans" => 2.4, "Knicks" => 1.8, "Thunder" => 1.4, "Magic" => 2.4, "76ers" => 2.1, "Suns" => 1.5, "Trail Blazers" => 1.7, "Kings" => 2.0, "Spurs" => 1.4, "Raptors" => 2.8, "Jazz" => 2.4, "Wizards" => 1.9)
+avg_points_per_game_per_player = Dict("Hawks" => 13.0, "Celtics" => 19.0, "Nets" => 9.1, "Hornets" => 11.4, "Bulls" => 13.0, "Cavaliers" => 21.7, "Mavericks" => 10.9, "Nuggets" => 10.9, "Pistons" => 13.2, "Warriors" => 8.3,  "Rockets" => 7.9, "Pacers" => 4.2, "Clippers" => 14.2, "Lakers" => 7.7, "Grizzlies" => 8.8, "Heat" => 11.9, "Bucks" => 15.2, "Timberwolves" => 19.9, "Pelicans" => 9.9, "Knicks" => 14.1, "Thunder" => 16.4, "Magic" => 13.5, "76ers" => 11.3, "Suns" => 6.8, "Trail Blazers" => 13.6, "Kings" => 9.1, "Spurs" => 13.5, "Raptors" => 9.1, "Jazz" => 10.1, "Wizards" => 9.9)
+avg_per_per_player = Dict("Hawks" => 15.4, "Celtics" => 17.0, "Nets" => 13.2, "Hornets" => 14.7, "Bulls" => 11.3, "Cavaliers" => 22.5, "Mavericks" => 14.9, "Nuggets" => 13.4, "Pistons" => 14.1, "Warriors" => 15.0,  "Rockets" => 12.1, "Pacers" => 10.5, "Clippers" => 16.4, "Lakers" => 13.6, "Grizzlies" => 11.8, "Heat" => 17.0, "Bucks" => 20.3, "Timberwolves" => 19.7, "Pelicans" => 13.8, "Knicks" => 16.0, "Thunder" => 19.4, "Magic" => 16.1, "76ers" => 12.8, "Suns" => 14.7, "Trail Blazers" => 15.5, "Kings" => 13.4, "Spurs" => 21.0, "Raptors" => 15.0, "Jazz" => 12.8, "Wizards" => 13.7)
+avg_ws_per_player = Dict("Hawks" => 4.1, "Celtics" => 6.0, "Nets" => 2.5, "Hornets" => 2.6, "Bulls" => 0.8, "Cavaliers" => 7.3, "Mavericks" => 3.4, "Nuggets" => 2.0, "Pistons" => 4.1, "Warriors" => 2.1, "Rockets" => 3.1, "Pacers" => 0.5, "Clippers" => 4.5, "Lakers" => 3.2, "Grizzlies" => 1.7, "Heat" => 3.9, "Bucks" => 2.9, "Timberwolves" => 7.6, "Pelicans" => 2.2, "Knicks" => 5.0, "Thunder" => 7.9, "Magic" => 4.2, "76ers" => 3.0, "Suns" => 3.4, "Trail Blazers" => 3.8, "Kings" => 2.9, "Spurs" => 5.3, "Raptors" => 4.0, "Jazz" => 1.6, "Wizards" => 0.8)
+
+teams = collect(keys(team_wins))
+
+team_wins_values = [team_wins[team] for team in teams]
+
+avg_g_played_values = [avg_g_played[team] for team in teams]
+avg_mins_played_per_game_per_player_values = [avg_mins_played_per_game_per_player[team] for team in teams]
+avg_fgs_made_per_game_per_player_values = [avg_fgs_made_per_game_per_player[team] for team in teams]
+avg_fgs_attempted_per_game_per_player_values = [avg_fgs_attempted_per_game_per_player[team] for team in teams]
+avg_fg_pct_per_game_per_player_values = [avg_fg_pct_per_player[team] for team in teams]
+avg_3ps_made_per_game_per_player_values = [avg_3ps_made_per_game_per_player[team] for team in teams]
+avg_3ps_attempted_per_game_per_player_values = [avg_3ps_attempted_per_game_per_player[team] for team in teams]
+avg_3p_pct_per_game_per_player_values = [avg_3p_pct_per_player[team] for team in teams]
+avg_2ps_made_per_game_per_player_values = [avg_2ps_made_per_game_per_player[team] for team in teams]
+avg_2ps_attempted_per_game_per_player_values = [avg_2ps_attempted_per_game_per_player[team] for team in teams]
+avg_2p_pct_per_game_per_player_values = [avg_2p_pct_per_player[team] for team in teams]
+avg_efg_pct_per_player_values = [avg_efg_pct_per_player[team] for team in teams]
+avg_fts_made_per_game_per_player_values = [avg_fts_made_per_game_per_player[team] for team in teams]
+avg_fts_attempted_per_game_per_player_values = [avg_fts_attempted_per_game_per_player[team] for team in teams]
+avg_ft_pct_per_game_per_player_values = [avg_ft_pct_per_player[team] for team in teams]
+avg_orb_per_game_per_player_values = [avg_orb_per_game_per_player[team] for team in teams]
+avg_drb_per_game_per_player_values = [avg_drb_per_game_per_player[team] for team in teams]
+avg_trb_per_game_per_player_values = [avg_trb_per_game_per_player[team] for team in teams]
+avg_assists_per_game_per_player_values = [avg_assists_per_game_per_player[team] for team in teams]
+avg_steals_per_game_per_player_values = [avg_steals_per_game_per_player[team] for team in teams]
+avg_blocks_per_game_per_player_values = [avg_blocks_per_game_per_player[team] for team in teams]
+avg_turnovers_per_game_per_player_values = [avg_turnovers_per_game_per_player[team] for team in teams]
+avg_fouls_per_game_per_player_values = [avg_fouls_per_game_per_player[team] for team in teams]
+avg_points_per_game_per_player_values = [avg_points_per_game_per_player[team] for team in teams]
+avg_per_per_player_values = [avg_per_per_player[team] for team in teams]
+avg_ws_per_player_values = [avg_ws_per_player[team] for team in teams]
+
+games_played_r = cor(team_wins_values, avg_g_played_values)
+mins_played_r = cor(team_wins_values, avg_mins_played_per_game_per_player_values)
+fgs_made_r = cor(team_wins_values, avg_fgs_made_per_game_per_player_values)
+fgs_attempted_r = cor(team_wins_values, avg_fgs_attempted_per_game_per_player_values)
+fg_pct_r = cor(team_wins_values, avg_fg_pct_per_game_per_player_values)
+threepoints_made_r = cor(team_wins_values, avg_3ps_made_per_game_per_player_values)
+threepoints_attempted_r = cor(team_wins_values, avg_3ps_attempted_per_game_per_player_values)
+threepoint_pct_r = cor(team_wins_values, avg_3p_pct_per_game_per_player_values)
+twopoints_made_r = cor(team_wins_values, avg_2ps_made_per_game_per_player_values)
+twopoints_attempted_r = cor(team_wins_values, avg_2ps_attempted_per_game_per_player_values)
+twopoint_pct_r = cor(team_wins_values, avg_2p_pct_per_game_per_player_values)
+efg_pct_r = cor(team_wins_values, avg_efg_pct_per_player_values)
+fts_made_r = cor(team_wins_values, avg_fts_made_per_game_per_player_values)
+fts_attempted_r = cor(team_wins_values, avg_fts_attempted_per_game_per_player_values)
+ft_pct_r = cor(team_wins_values, avg_ft_pct_per_game_per_player_values)
+orb_r = cor(team_wins_values, avg_orb_per_game_per_player_values)
+drb_r = cor(team_wins_values, avg_drb_per_game_per_player_values)
+trb_r = cor(team_wins_values, avg_trb_per_game_per_player_values)
+assists_r = cor(team_wins_values, avg_assists_per_game_per_player_values)
+steals_r = cor(team_wins_values, avg_steals_per_game_per_player_values)
+blocks_r = cor(team_wins_values, avg_blocks_per_game_per_player_values)
+turnovers_r = cor(team_wins_values, avg_turnovers_per_game_per_player_values)
+fouls_r = cor(team_wins_values, avg_fouls_per_game_per_player_values)
+ppg_r = cor(team_wins_values, avg_points_per_game_per_player_values)
+per_r = cor(team_wins_values, avg_per_per_player_values)
+ws_r = cor(team_wins_values, avg_ws_per_player_values)
+
+println("Correlation between team wins and average games played: ", round(games_played_r, digits=3))
+println("Correlation between team wins and average minutes played per player: ", round(mins_played_r, digits=3))
+println("Correlation between team wins and average FGS made per game per player: ", round(fgs_made_r, digits=3))
+println("Correlation between team wins and average FGS attempted per game per player: ", round(fgs_attempted_r, digits=3))
+println("Correlation between team wins and average FG percent per game per player: ", round(fg_pct_r, digits=3))
+println("Correlation between team wins and average 3PS made per game per player: ", round(threepoints_made_r, digits=3))
+println("Correlation between team wins and average 3PS attempted per game per player: ", round(threepoints_attempted_r, digits=3))
+println("Correlation between team wins and average 3P percent per game per player: ", round(threepoint_pct_r, digits=3))
+println("Correlation between team wins and average 2PS made per game per player: ", round(twopoints_made_r, digits=3))
+println("Correlation between team wins and average 2PS attempted per game per player: ", round(twopoints_attempted_r, digits=3))
+println("Correlation between team wins and average 2P percent per game per player: ", round(twopoint_pct_r, digits=3))
+println("Correlation between team wins and average EFG percent per game per player: ", round(efg_pct_r, digits=3))
+println("Correlation between team wins and average FTS made per game per player: ", round(fts_made_r, digits=3))
+println("Correlation between team wins and average FTS attempted per game per player: ", round(fts_attempted_r, digits=3))
+println("Correlation between team wins and average FT percent per game per player: ", round(ft_pct_r, digits=3))
+println("Correlation between team wins and average ORB per game per player: ", round(orb_r, digits=3))
+println("Correlation between team wins and average DRB per game per player: ", round(drb_r, digits=3))
+println("Correlation between team wins and average TRB per game per player: ", round(trb_r, digits=3))
+println("Correlation between team wins and average assists per game per player: ", round(assists_r, digits=3))
+println("Correlation between team wins and average steals per game per player: ", round(steals_r, digits=3))
+println("Correlation between team wins and average blocks per game per player: ", round(blocks_r, digits=3))
+println("Correlation between team wins and average turnovers per game per player: ", round(turnovers_r, digits=3))
+println("Correlation between team wins and average fouls per game per player: ", round(fouls_r, digits=3))
+println("Correlation between team wins and average PPG per game per player: ", round(ppg_r, digits=3))
+println("Correlation between team wins and average PER per game per player: ", round(per_r, digits=3))
+println("Correlation between team wins and average WS per game per player: ", round(ws_r, digits=3))
