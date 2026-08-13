@@ -5,8 +5,8 @@ This is a comparative analysis of Mixed-Integer Linear Programming, Greedy, and 
 Implemented in Julia using JuMP and HiGHS.
 
 ### Key Findings ###
-- MILP produces approximately a 45.9% improvement over the Heuristic baseline
-- MILP produces approximately a 63.7% improvement over the Greedy baseline
+- MILP produces approximately a 50.5% improvement over the Heuristic baseline
+- MILP produces approximately a 25.7% improvement over the Greedy baseline
 - Non-monotonic scalability behavior observed across pool sizes of 70 to 370 players attributable to LP relaxation tightness
 - Structural divergence from the championship roster team attributable to additive objective function limitations
 
